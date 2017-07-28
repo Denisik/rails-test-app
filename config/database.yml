@@ -9,6 +9,6 @@ development: &development
 
 test:
   <<: *development
-  host: postgres
-  username: postgres
+  host: localhost
+  username: pguser
   database: test_app_test
