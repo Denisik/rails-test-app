@@ -1,6 +1,7 @@
 ---
 :concurrency: 25
-:pidfile: tmp/pids/sidekiq.pid
+:pidfile: ./tmp/pids/sidekiq.pid
+:logfile: ./log/sidekiq_development.log
 development:
   :concurence: 10
 staging:
