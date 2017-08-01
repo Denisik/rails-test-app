@@ -23,7 +23,7 @@ task deploy: :environment do
           command  "touch /home/deploy/app1/tmp/restart.txt"
           command "/home/deploy/app1/current/bin/yarn install --production"
           command "/home/deploy/app1/current/bin/webpack"
-          command "touch #{deploy_to}/tmp/restart.txt"
+          command "touch /home/deploy/app1/current/tmp/restart.txt"
         end
     end
 end
