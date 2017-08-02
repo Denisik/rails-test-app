@@ -55,3 +55,4 @@ namespace :sidekiq do
     command 'echo "-----> Start Sidekiq"'
     command 'cd /home/deploy/app1/current && source ~/.rvm/scripts/rvm && rvm use ruby-2.4.1 && sidekiq -d'
   end
+end
