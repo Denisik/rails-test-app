@@ -18,12 +18,40 @@ end
 task deploy: :environment do
   deploy do
     invoke :'git:clone'
+    invoke :'server:stop_server'
+    invoke :'sidekiq:stop'
     invoke :'bundle:install'
         on :launch do
-          command  "touch /home/deploy/app1/tmp/restart.txt"
           command "/home/deploy/app1/current/bin/yarn install --production"
           command "/home/deploy/app1/current/bin/webpack"
-          command "touch /home/deploy/app1/current/tmp/restart.txt"
+          invoke :'server:start_server'
+          invoke :'sidekiq:start'
         end
     end
 end
+namespace :server do
+  desc 'Stop server'
+  task :stop_server do
+    command 'echo "-----> Stop Server"'
+    command 'kill -9 $(lsof -i :3000 -t) || true'
+  end
+
+  desc 'Start server'
+  task :start_server do
+    command 'echo "-----> Start Server"'
+    command 'cd /home/deploy/app1/current && source ~/.rvm/scripts/rvm && rvm use ruby-2.4.1 && rails s -d'
+  end
+end
+
+namespace :sidekiq do
+  desc 'Stop sidekiq'
+  task :stop do
+    command 'echo "-----> Stop Sidekiq"'
+    command 'kill -9 $(cat /home/deploy/app1/current/tmp/pids/sidekiq.pid) || true'
+  end
+
+  desc 'Start sidekiq'
+  task :start do
+    command 'echo "-----> Start Sidekiq"'
+    command 'cd /home/deploy/app1/current && source ~/.rvm/scripts/rvm && rvm use ruby-2.4.1 && sidekiq -d'
+  end
